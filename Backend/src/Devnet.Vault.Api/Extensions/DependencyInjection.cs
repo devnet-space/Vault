@@ -6,28 +6,31 @@ namespace Devnet.Vault.Api.Extensions;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
+    public static WebApplicationBuilder AddPresentation(this WebApplicationBuilder builder, IConfiguration configuration)
     {
-        services.AddControllers()
+        builder.Services.AddControllers()
            .AddJsonOptions(options =>
            {
                options.JsonSerializerOptions.Converters.Add(
                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, allowIntegerValues: false));
            });
 
-        services.BindAppsettings(configuration);
+        builder.Services.BindAppsettings(configuration);
 
         // Register MediatR for CQRS pattern
-        services.AddMediatR(config =>
+        builder.Services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssemblies(
                 typeof(RequestOtpCommand).Assembly);
         });
 
-        services.AddAuthPolicy(configuration);
-        services.AddCORSPolicy(configuration);
-        services.AddOpenApi();
+        builder.Services.AddAuthPolicy(configuration);
+        builder.Services.AddCORSPolicy(configuration);
+        builder.ConfigureLogger();
 
-        return services;
+
+        builder.Services.AddOpenApi();
+
+        return builder;
     }
 }
