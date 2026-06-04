@@ -2,7 +2,7 @@
 
 namespace Devnet.Vault.Application.Features.VaultItems.DTOs;
 
-public class AddVaultItemRequest
+public record AddVaultItemRequest
 {
     public string Title { get; set; } = string.Empty;
     public EntryType EntryType { get; set; }
@@ -11,7 +11,7 @@ public class AddVaultItemRequest
     public long? GroupId { get; set; }
 }
 
-public class AddVaultItemResponse
+public record AddVaultItemResponse
 {
     public long VaultItemId { get; set; }
 }

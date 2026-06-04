@@ -2,7 +2,7 @@
 
 namespace Devnet.Vault.Application.Features.Groups.DTOs;
 
-public class GroupDetailsResponse
+public record GroupDetailsResponse
 {
     public long GroupId { get; set; }
     public string Name { get; set; } = string.Empty;

@@ -1,6 +1,6 @@
 ﻿namespace Devnet.Vault.Application.Notifications.Email.Models;
 
-public class EmailMessage
+public sealed class EmailMessage
 {
     public List<string> To { get; set; } = [];
     public List<string> Cc { get; set; } = [];

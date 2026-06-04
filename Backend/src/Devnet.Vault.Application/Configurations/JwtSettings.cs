@@ -1,6 +1,6 @@
 ﻿namespace Devnet.Vault.Application.Configurations;
 
-public class JwtSettings
+public sealed class JwtSettings
 {
     public string SecretKey { get; set; } = null!;
     public string Issuer { get; set; } = null!;

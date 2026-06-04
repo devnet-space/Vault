@@ -1,6 +1,6 @@
 ﻿namespace Devnet.Vault.Application.Notifications.Email.Models;
 
-public class EmailAttachment
+public sealed class EmailAttachment
 {
     public string FileName { get; set; } = string.Empty;
     public byte[] Content { get; set; } = [];
