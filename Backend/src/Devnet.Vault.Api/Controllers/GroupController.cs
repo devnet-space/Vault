@@ -27,15 +27,8 @@ public class GroupController(IMediator _mediator) : ControllerBase
         if (userId <= 0)
             return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-        try
-        {
-            var response = await _mediator.Send(new CreateGroupCommand(request, userId), cancellationToken);
-            return Ok(response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var response = await _mediator.Send(new CreateGroupCommand(request, userId), cancellationToken);
+        return Ok(response);
     }
 
     [HttpPatch(ApiEndpoints.GroupApiEndpoints.UPDATE_NAME)]
