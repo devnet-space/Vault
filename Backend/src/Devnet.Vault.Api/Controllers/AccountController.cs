@@ -48,21 +48,14 @@ public class AccountController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> UpdateProfileDetails([FromForm] UpdateProfileDetailsRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = HttpContext.GetUserId();
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+        var userId = HttpContext.GetUserId();
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-            var response = await _mediator.Send(new UpdateProfileDetailsCommand(request, userId, userId), cancellationToken);
-            if (response)
-                return Ok(response);
-            return BadRequest(new { message = ProfileMessages.PROFILE_UPDATE_FAILED });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var response = await _mediator.Send(new UpdateProfileDetailsCommand(request, userId, userId), cancellationToken);
+        if (response)
+            return Ok(response);
+        return BadRequest(new { message = ProfileMessages.PROFILE_UPDATE_FAILED });
     }
 
     /// <summary>
@@ -74,19 +67,12 @@ public class AccountController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> UpdateEmailAddress([FromBody] UpdateEmailAddressRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = HttpContext.GetUserId();
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+        var userId = HttpContext.GetUserId();
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-            var response = await _mediator.Send(new UpdateUserEmailAddressCommand(request, userId, userId), cancellationToken);
-            return Ok(response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var response = await _mediator.Send(new UpdateUserEmailAddressCommand(request, userId, userId), cancellationToken);
+        return Ok(response);
     }
 
     /// <summary>
@@ -98,19 +84,12 @@ public class AccountController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> UpdatePhoneNumber([FromBody] UpdatePhoneNumberRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = HttpContext.GetUserId();
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+        var userId = HttpContext.GetUserId();
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-            var response = await _mediator.Send(new UpdateUserPhoneNumberCommand(request, userId, userId), cancellationToken);
-            return Ok(response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var response = await _mediator.Send(new UpdateUserPhoneNumberCommand(request, userId, userId), cancellationToken);
+        return Ok(response);
     }
 
     /// <summary>
@@ -122,19 +101,12 @@ public class AccountController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> DeactivateAccount([FromBody] DeactivateAccountRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = HttpContext.GetUserId();
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+        var userId = HttpContext.GetUserId();
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-            var response = await _mediator.Send(new DeactivateAccountCommand(request, userId, userId), cancellationToken);
-            return Ok(response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var response = await _mediator.Send(new DeactivateAccountCommand(request, userId, userId), cancellationToken);
+        return Ok(response);
     }
 
     /// <summary>
@@ -146,18 +118,11 @@ public class AccountController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> DeleteAccount([FromBody] DeleteAccountRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = HttpContext.GetUserId();
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+        var userId = HttpContext.GetUserId();
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-            var response = await _mediator.Send(new DeleteAccountCommand(request, userId, userId), cancellationToken);
-            return Ok(response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var response = await _mediator.Send(new DeleteAccountCommand(request, userId, userId), cancellationToken);
+        return Ok(response);
     }
 }

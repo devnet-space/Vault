@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Devnet.Vault.Application.Features.Shared.FileUpload.Models;
 
-public class FileUploadTask
+public sealed class FileUploadTask
 {
     public Guid UploadId { get; set; }
     public string FileName { get; set; } = string.Empty;

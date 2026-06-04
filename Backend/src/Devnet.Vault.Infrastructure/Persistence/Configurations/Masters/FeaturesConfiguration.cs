@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Devnet.Vault.Infrastructure.Persistence.Configurations.Masters;
 
-public class FeaturesConfiguration : IEntityTypeConfiguration<Features>
+internal sealed class FeaturesConfiguration : IEntityTypeConfiguration<Features>
 {
     public void Configure(EntityTypeBuilder<Features> builder)
     {

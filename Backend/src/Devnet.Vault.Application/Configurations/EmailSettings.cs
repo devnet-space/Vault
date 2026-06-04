@@ -1,6 +1,6 @@
 ﻿namespace Devnet.Vault.Application.Configurations;
 
-public class EmailSettings
+public sealed class EmailSettings
 {
     public string SmtpServer { get; set; } = string.Empty;
     public int Port { get; set; }

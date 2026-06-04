@@ -5,13 +5,13 @@ using Devnet.Vault.Infrastructure;
 
 namespace Devnet.Vault.Api;
 
-public class Program
+public sealed class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddPresentation(builder.Configuration);
+        builder.AddPresentation(builder.Configuration);
         builder.Services.AddApplication();
         builder.Services.AddInfrastructure(builder.Configuration);
 

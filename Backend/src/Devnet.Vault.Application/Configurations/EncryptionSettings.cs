@@ -1,6 +1,6 @@
 ﻿namespace Devnet.Vault.Application.Configurations;
 
-public class EncryptionSettings
+public sealed class EncryptionSettings
 {
     public string AesKey { get; set; } = null!;
     public string AesIV { get; set; } = null!;

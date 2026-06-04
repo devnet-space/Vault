@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Devnet.Vault.Application.Behaviour;
 
-public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> _validators)
+public sealed class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> _validators)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {

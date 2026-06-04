@@ -4,7 +4,7 @@ using System.Threading.Channels;
 
 namespace Devnet.Vault.Infrastructure.Storage.CloudFareR2.Queue;
 
-internal class InMemoryFileUploadQueue : IFileUploadQueue
+internal sealed class InMemoryFileUploadQueue : IFileUploadQueue
 {
     private readonly Channel<FileUploadTask> _queue = Channel.CreateUnbounded<FileUploadTask>();
 

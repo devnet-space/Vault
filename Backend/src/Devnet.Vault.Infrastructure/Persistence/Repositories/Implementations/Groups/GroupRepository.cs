@@ -7,7 +7,7 @@ using static Devnet.Vault.Domain.Constants.Messages.ValidationMessages;
 
 namespace Devnet.Vault.Infrastructure.Persistence.Repositories.Implementations.Groups;
 
-public class GroupRepository(AppDbContext _dbContext) : IGroupRepository
+internal sealed class GroupRepository(AppDbContext _dbContext) : IGroupRepository
 {
     public async Task<bool> CreateNewGroup(GroupDetails group, CancellationToken ctx)
     {

@@ -22,19 +22,12 @@ public class VaultItemController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
     public async Task<IActionResult> CreateVaultItem([FromBody] AddVaultItemRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = HttpContext.GetUserId();
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+        var userId = HttpContext.GetUserId();
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-            var response = await _mediator.Send(new AddNewVaultItemCommand(request, userId), cancellationToken);
-            return Ok(response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var response = await _mediator.Send(new AddNewVaultItemCommand(request, userId), cancellationToken);
+        return Ok(response);
     }
 
     [HttpPatch(VaultItemApiEndpoints.UPDATE_TITLE)]
@@ -45,20 +38,13 @@ public class VaultItemController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
     public async Task<IActionResult> UpdateTitle([FromBody] UpdateVaultItemTitleDto request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = HttpContext.GetUserId();
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+        var userId = HttpContext.GetUserId();
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-            var result = await _mediator.Send(new UpdateVaultItemTitleCommand(request, userId), cancellationToken);
-            if (result) return Ok(result);
-            return BadRequest(new { message = VaultEntryValidationMessages.ENTRY_UPDATE_FAILED });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _mediator.Send(new UpdateVaultItemTitleCommand(request, userId), cancellationToken);
+        if (result) return Ok(result);
+        return BadRequest(new { message = VaultEntryValidationMessages.ENTRY_UPDATE_FAILED });
     }
 
     [HttpPatch(VaultItemApiEndpoints.UPDATE_DATA)]
@@ -69,20 +55,13 @@ public class VaultItemController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
     public async Task<IActionResult> UpdateData([FromBody] UpdateVaultItemDataDto request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = HttpContext.GetUserId();
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+        var userId = HttpContext.GetUserId();
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-            var result = await _mediator.Send(new UpdateVaultItemDataCommand(request, userId), cancellationToken);
-            if (result) return Ok(result);
-            return BadRequest(new { message = VaultEntryValidationMessages.ENTRY_UPDATE_FAILED });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _mediator.Send(new UpdateVaultItemDataCommand(request, userId), cancellationToken);
+        if (result) return Ok(result);
+        return BadRequest(new { message = VaultEntryValidationMessages.ENTRY_UPDATE_FAILED });
     }
 
     [HttpPatch(VaultItemApiEndpoints.UPDATE_GROUP)]
@@ -93,20 +72,13 @@ public class VaultItemController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
     public async Task<IActionResult> UpdateGroup([FromBody] UpdateVaultItemGroupDto request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = HttpContext.GetUserId();
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+        var userId = HttpContext.GetUserId();
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-            var result = await _mediator.Send(new UpdateVaultItemGroupCommand(request, userId), cancellationToken);
-            if (result) return Ok(result);
-            return BadRequest(new { message = VaultEntryValidationMessages.ENTRY_UPDATE_FAILED });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _mediator.Send(new UpdateVaultItemGroupCommand(request, userId), cancellationToken);
+        if (result) return Ok(result);
+        return BadRequest(new { message = VaultEntryValidationMessages.ENTRY_UPDATE_FAILED });
     }
 
     [HttpDelete(VaultItemApiEndpoints.DELETE_ITEM)]
@@ -117,19 +89,12 @@ public class VaultItemController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
     public async Task<IActionResult> DeleteVaultItem([FromQuery] long vaultEntryId, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = HttpContext.GetUserId();
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+        var userId = HttpContext.GetUserId();
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-            var result = await _mediator.Send(new DeleteVaultItemCommand(vaultEntryId, userId), cancellationToken);
-            if (result) return Ok(result);
-            return BadRequest(new { message = VaultEntryValidationMessages.ENTRY_DELETE_FAILED });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _mediator.Send(new DeleteVaultItemCommand(vaultEntryId, userId), cancellationToken);
+        if (result) return Ok(result);
+        return BadRequest(new { message = VaultEntryValidationMessages.ENTRY_DELETE_FAILED });
     }
 }

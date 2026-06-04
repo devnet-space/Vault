@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Devnet.Vault.Infrastructure.Persistence.Configurations.Groups;
 
-public class GroupDetailsConfiguration : IEntityTypeConfiguration<GroupDetails>
+internal sealed class GroupDetailsConfiguration : IEntityTypeConfiguration<GroupDetails>
 {
     public void Configure(EntityTypeBuilder<GroupDetails> builder)
     {

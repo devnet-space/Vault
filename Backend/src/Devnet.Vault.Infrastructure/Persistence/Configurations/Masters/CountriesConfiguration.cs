@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Devnet.Vault.Infrastructure.Persistence.Configurations.Masters;
 
-public class CountriesConfiguration : IEntityTypeConfiguration<Countries>
+internal sealed class CountriesConfiguration : IEntityTypeConfiguration<Countries>
 {
     public void Configure(EntityTypeBuilder<Countries> builder)
     {

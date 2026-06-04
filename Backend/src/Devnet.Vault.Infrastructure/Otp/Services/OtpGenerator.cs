@@ -4,7 +4,7 @@ using static Devnet.Vault.Domain.Constants.Messages.ValidationMessages;
 
 namespace Devnet.Vault.Infrastructure.Otp.Services;
 
-public class OtpGenerator : IOtpGenerator
+internal sealed class OtpGenerator : IOtpGenerator
 {
     public string Generate(int length = 6)
     {

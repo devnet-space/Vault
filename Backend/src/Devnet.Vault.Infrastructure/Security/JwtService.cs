@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Devnet.Vault.Infrastructure.Security;
 
-public class JwtService(IOptions<JwtSettings> _options) : IJwtService
+internal sealed class JwtService(IOptions<JwtSettings> _options) : IJwtService
 {
     private readonly JwtSettings _settings = _options.Value;
 

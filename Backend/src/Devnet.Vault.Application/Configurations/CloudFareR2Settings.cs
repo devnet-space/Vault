@@ -1,6 +1,6 @@
 ﻿namespace Devnet.Vault.Application.Configurations;
 
-public class CloudFareR2Settings
+public sealed class CloudFareR2Settings
 {
     public string AccountId { get; set; } = string.Empty;
 

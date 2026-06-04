@@ -6,7 +6,7 @@ using static Devnet.Vault.Domain.Constants.Messages.ValidationMessages;
 
 namespace Devnet.Vault.Infrastructure.Persistence.Repositories.Implementations.Authentication;
 
-public class AuthRepository(AppDbContext _dbContext) : IAuthRepository
+internal sealed class AuthRepository(AppDbContext _dbContext) : IAuthRepository
 {
     /// <summary>
     /// Register a new user in the system

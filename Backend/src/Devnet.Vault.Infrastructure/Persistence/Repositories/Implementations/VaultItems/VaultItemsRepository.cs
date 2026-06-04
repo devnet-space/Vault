@@ -7,7 +7,7 @@ using static Devnet.Vault.Domain.Constants.Messages.ValidationMessages;
 
 namespace Devnet.Vault.Infrastructure.Persistence.Repositories.Implementations.VaultItems;
 
-public class VaultItemsRepository(AppDbContext _dbContext) : IVaultItemsRepository
+internal sealed class VaultItemsRepository(AppDbContext _dbContext) : IVaultItemsRepository
 {
     public async Task<VaultEntries?> AddNewVaultItem(VaultEntries vaultEntry, CancellationToken cancellationToken)
     {

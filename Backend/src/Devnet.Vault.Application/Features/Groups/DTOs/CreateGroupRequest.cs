@@ -2,7 +2,7 @@
 
 namespace Devnet.Vault.Application.Features.Groups.DTOs;
 
-public class CreateGroupRequest
+public record CreateGroupRequest
 {
     public string Name { get; set; } = string.Empty;
     public long? ParentGroupId { get; set; }
@@ -11,7 +11,7 @@ public class CreateGroupRequest
     public GroupType GroupType { get; set; }
 }
 
-public class CreateGroupResponse
+public record CreateGroupResponse
 {
     public long GroupId { get; set; }
 }

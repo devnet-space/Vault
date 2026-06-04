@@ -3,7 +3,7 @@ using Devnet.Vault.Application.Features.Shared.Otp.Interfaces.Services;
 
 namespace Devnet.Vault.Infrastructure.Otp.Services;
 
-public class OtpValidationService(ICacheService _cacheService) : IOtpValidationService
+internal sealed class OtpValidationService(ICacheService _cacheService) : IOtpValidationService
 {
     public async Task<bool> ValidateAsync(string key, string otp)
     {

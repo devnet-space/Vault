@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Devnet.Vault.Infrastructure.Security;
 
-public class EncryptionService(IOptions<EncryptionSettings> options) : IEncryptionService
+internal sealed class EncryptionService(IOptions<EncryptionSettings> options) : IEncryptionService
 {
     private readonly EncryptionSettings _settings = options.Value;
 

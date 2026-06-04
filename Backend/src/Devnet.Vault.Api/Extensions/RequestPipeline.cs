@@ -12,6 +12,7 @@ public static class RequestPipeline
 
         _app.UseCors(ConfigKeys.CORS_POLICY_NAME);
         _app.UseHttpsRedirection();
+        _app.UseMiddleware<CorrelationIdMiddleware>();
         _app.UseRouting();
         _app.UseMiddleware<ExceptionHandler>();
         _app.UseAuthentication();

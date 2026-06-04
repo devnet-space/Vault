@@ -6,6 +6,7 @@ using Devnet.Vault.Application.Features.Auth.Interfaces.Services;
 using Devnet.Vault.Application.Features.Groups.Interfaces.Repositories;
 using Devnet.Vault.Application.Features.Shared.Cache.Interfaces.Services;
 using Devnet.Vault.Application.Features.Shared.FileUpload.Interfaces;
+using Devnet.Vault.Application.Features.Shared.Logging.Interfaces;
 using Devnet.Vault.Application.Features.Shared.Otp.Interfaces.Services;
 using Devnet.Vault.Application.Features.VaultItems.Interfaces;
 using Devnet.Vault.Application.Notifications.Email.Interfaces;
@@ -13,6 +14,7 @@ using Devnet.Vault.Application.Security.Encryption.Interfaces;
 using Devnet.Vault.Domain.Constants.AppKeys;
 using Devnet.Vault.Domain.Constants.Messages;
 using Devnet.Vault.Infrastructure.Cache.Services;
+using Devnet.Vault.Infrastructure.Logging.Services;
 using Devnet.Vault.Infrastructure.Notifications.Email.Queue;
 using Devnet.Vault.Infrastructure.Notifications.Email.Services;
 using Devnet.Vault.Infrastructure.Notifications.Email.Workers;
@@ -55,6 +57,7 @@ public static class DependencyInjection
 
         _services.AddHostedService<EmailWorker>();
         _services.AddHostedService<FileUploadWorker>();
+        _services.AddSingleton(typeof(IAppLogger<>), typeof(SerilogAppLogger<>));
 
         _services.AddScoped<IEncryptionService, EncryptionService>();
         _services.AddScoped<IJwtService, JwtService>();

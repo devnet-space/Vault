@@ -6,7 +6,6 @@ using Devnet.Vault.Domain.Constants.Routes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using static Devnet.Vault.Domain.Constants.Messages.ValidationMessages;
 
 namespace Devnet.Vault.Api.Controllers;
@@ -31,33 +30,26 @@ public class AuthController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
     public async Task<IActionResult> LoginWithOtp([FromBody] RegisterOrLoginRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(request.Identifier) ||
+        if (string.IsNullOrWhiteSpace(request.Identifier) ||
                 string.IsNullOrWhiteSpace(request.Otp))
-            {
-                return BadRequest(new { message = AuthValidationMessages.OTP_IDENTIFIER_REQUIRED });
-            }
-
-            var ipAddress =
-                request.IpAddress ??
-                HttpContext.GetRequestIpAddress();
-
-            var modifiedRequest = request with
-            {
-                IpAddress = ipAddress
-            };
-
-            var response = await _mediator.Send(new RegisterOrLoginCommand(modifiedRequest), cancellationToken);
-
-            SetAuthCookies(response);
-
-            return Ok(response);
-        }
-        catch (InvalidOperationException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new { message = AuthValidationMessages.OTP_IDENTIFIER_REQUIRED });
         }
+
+        var ipAddress =
+            request.IpAddress ??
+            HttpContext.GetRequestIpAddress();
+
+        var modifiedRequest = request with
+        {
+            IpAddress = ipAddress
+        };
+
+        var response = await _mediator.Send(new RegisterOrLoginCommand(modifiedRequest), cancellationToken);
+
+        SetAuthCookies(response);
+
+        return Ok(response);
     }
 
     #endregion
@@ -77,26 +69,19 @@ public class AuthController(IMediator _mediator) : ControllerBase
 
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(request.RefreshToken))
-                return BadRequest(new { message = AuthValidationMessages.OTP_REFRESH_TOKEN_REQUIRED });
+        if (string.IsNullOrWhiteSpace(request.RefreshToken))
+            return BadRequest(new { message = AuthValidationMessages.OTP_REFRESH_TOKEN_REQUIRED });
 
-            var userId = HttpContext.GetUserId();
+        var userId = HttpContext.GetUserId();
 
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
 
-            var response = await _mediator.Send(new RefreshTokenCommand(request, userId), cancellationToken);
-            ClearAuthCookies();
-            SetAuthCookies(response);
+        var response = await _mediator.Send(new RefreshTokenCommand(request, userId), cancellationToken);
+        ClearAuthCookies();
+        SetAuthCookies(response);
 
-            return Ok(response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        return Ok(response);
     }
 
     #endregion
@@ -115,28 +100,21 @@ public class AuthController(IMediator _mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
     public async Task<IActionResult> Logout(CancellationToken cancellationToken)
     {
-        try
+        var userId = HttpContext.GetUserId();
+
+        if (userId <= 0)
+            return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
+
+        if (!Request.Cookies.TryGetValue(AppConstants.APP_REFRESH_TOKEN_NAME, out var refreshToken) || string.IsNullOrWhiteSpace(refreshToken))
         {
-            var userId = HttpContext.GetUserId();
-
-            if (userId <= 0)
-                return Unauthorized(new { message = UserInfoMessages.REQUEST_USER_ID_INVALID });
-
-            if (!Request.Cookies.TryGetValue(AppConstants.APP_REFRESH_TOKEN_NAME, out var refreshToken) || string.IsNullOrWhiteSpace(refreshToken))
-            {
-                return BadRequest(new { message = AuthValidationMessages.OTP_REFRESH_TOKEN_REQUIRED });
-            }
-
-            var response = await _mediator.Send(new LogoutCommand(userId, refreshToken), cancellationToken);
-
-            ClearAuthCookies();
-
-            return Ok(response);
+            return BadRequest(new { message = AuthValidationMessages.OTP_REFRESH_TOKEN_REQUIRED });
         }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+
+        var response = await _mediator.Send(new LogoutCommand(userId, refreshToken), cancellationToken);
+
+        ClearAuthCookies();
+
+        return Ok(response);
     }
 
     #endregion

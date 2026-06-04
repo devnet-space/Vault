@@ -4,6 +4,11 @@ using System.Text.Json;
 
 namespace Devnet.Vault.Api.Middlewares;
 
+/// <summary>
+/// All unhandled exception are logged and generic response message created and send for the request
+/// </summary>
+/// <param name="next"></param>
+/// <param name="logger"></param>
 public class ExceptionHandler(RequestDelegate next, ILogger<ExceptionHandler> logger)
 {
     public async Task InvokeAsync(HttpContext context)
@@ -11,6 +16,13 @@ public class ExceptionHandler(RequestDelegate next, ILogger<ExceptionHandler> lo
         try
         {
             await next(context);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogInformation(ex, ExceptionMessages.GENERIC_VALIDATION_ERROR);
+
+            await WriteResponse(context, StatusCodes.Status400BadRequest,
+                ex.Message, ex.Message);
         }
         catch (ValidationException ex)
         {
