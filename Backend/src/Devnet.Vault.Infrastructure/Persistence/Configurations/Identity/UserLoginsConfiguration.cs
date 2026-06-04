@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Devnet.Vault.Infrastructure.Persistence.Configurations.Identity;
 
-public class UserLoginsConfiguration : IEntityTypeConfiguration<UserLogins>
+internal sealed class UserLoginsConfiguration : IEntityTypeConfiguration<UserLogins>
 {
     public void Configure(EntityTypeBuilder<UserLogins> builder)
     {

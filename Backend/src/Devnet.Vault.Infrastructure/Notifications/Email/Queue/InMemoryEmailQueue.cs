@@ -4,7 +4,7 @@ using System.Threading.Channels;
 
 namespace Devnet.Vault.Infrastructure.Notifications.Email.Queue;
 
-public class InMemoryEmailQueue : IEmailQueue
+internal sealed class InMemoryEmailQueue : IEmailQueue
 {
     private readonly Channel<EmailMessage> _queue = Channel.CreateUnbounded<EmailMessage>();
 

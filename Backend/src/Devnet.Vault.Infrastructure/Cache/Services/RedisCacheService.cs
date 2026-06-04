@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Devnet.Vault.Infrastructure.Cache.Services;
 
-internal class RedisCacheService(IConnectionMultiplexer redis) : ICacheService
+internal sealed class RedisCacheService(IConnectionMultiplexer redis) : ICacheService
 {
     private readonly IDatabase _db = redis.GetDatabase();
 

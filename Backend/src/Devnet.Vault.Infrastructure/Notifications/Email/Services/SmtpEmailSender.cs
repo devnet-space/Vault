@@ -7,7 +7,7 @@ using System.Net.Mail;
 
 namespace Devnet.Vault.Infrastructure.Notifications.Email.Services;
 
-public class SmtpEmailSender(IOptions<EmailSettings> _options) : IEmailSender
+internal sealed class SmtpEmailSender(IOptions<EmailSettings> _options) : IEmailSender
 {
     private readonly EmailSettings emailSettings = _options.Value;
     public async Task SendAsync(EmailMessage message)

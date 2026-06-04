@@ -2,15 +2,15 @@
 using Devnet.Vault.Application.Features.Shared.FileUpload.DTOs;
 using Devnet.Vault.Application.Features.Shared.FileUpload.Interfaces;
 using Devnet.Vault.Application.Features.Shared.FileUpload.Models;
+using Devnet.Vault.Application.Features.Shared.Logging.Interfaces;
 using Devnet.Vault.Domain.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Devnet.Vault.Infrastructure.Storage.CloudFareR2.Workers;
 
-public class FileUploadWorker(IFileUploadQueue _queue, IServiceScopeFactory _scopeFactory,
-    ILogger<FileUploadWorker> _logger) : BackgroundService
+internal sealed class FileUploadWorker(IFileUploadQueue _queue, IServiceScopeFactory _scopeFactory,
+    IAppLogger<FileUploadWorker> _logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

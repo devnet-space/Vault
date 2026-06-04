@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Devnet.Vault.Infrastructure.Persistence.Repositories.Implementations.Account;
 
 
-public class UserRepository(AppDbContext _dbContext) : IUserRepository
+internal sealed class UserRepository(AppDbContext _dbContext) : IUserRepository
 {
     public async Task<UserDetails?> GetUserDetailsByEmailAsync(string email, CancellationToken cancellationToken)
     {

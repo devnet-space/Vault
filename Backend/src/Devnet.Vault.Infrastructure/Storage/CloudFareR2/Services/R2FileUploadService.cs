@@ -3,11 +3,12 @@ using Amazon.S3.Model;
 using Devnet.Vault.Application.Configurations;
 using Devnet.Vault.Application.Features.Shared.FileUpload.Interfaces;
 using Devnet.Vault.Application.Features.Shared.FileUpload.Models;
+using Devnet.Vault.Application.Features.Shared.Logging.Interfaces;
 using Microsoft.Extensions.Options;
 
 namespace Devnet.Vault.Infrastructure.Storage.CloudFareR2.Services;
 
-public class R2FileUploadService(AmazonS3Client _r2Client, IOptions<CloudFareR2Settings> _options) : IR2FileUploadService
+internal sealed class R2FileUploadService(AmazonS3Client _r2Client, IOptions<CloudFareR2Settings> _options, IAppLogger<R2FileUploadService> _logger) : IR2FileUploadService
 {
 
     private readonly CloudFareR2Settings _r2Settings = _options.Value;
@@ -23,6 +24,7 @@ public class R2FileUploadService(AmazonS3Client _r2Client, IOptions<CloudFareR2S
 
         while (true)
         {
+            _logger.LogInformation("File Upload started: Attempt {retryCount}", retryCount);
             try
             {
                 await using var stream =
@@ -42,8 +44,10 @@ public class R2FileUploadService(AmazonS3Client _r2Client, IOptions<CloudFareR2S
 
                 return fileKey;
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message, retryCount);
+
                 retryCount++;
 
                 if (retryCount >= MaxRetryCount)

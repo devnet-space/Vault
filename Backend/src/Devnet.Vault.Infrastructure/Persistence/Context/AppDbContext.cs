@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Devnet.Vault.Infrastructure.Persistence.Context;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+internal sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
 
     // =========================

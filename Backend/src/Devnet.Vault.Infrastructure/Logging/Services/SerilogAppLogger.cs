@@ -3,7 +3,7 @@ using Serilog;
 
 namespace Devnet.Vault.Infrastructure.Logging.Services;
 
-public class SerilogAppLogger<T> : IAppLogger<T>
+internal sealed class SerilogAppLogger<T> : IAppLogger<T>
 {
     private readonly ILogger _logger;
 

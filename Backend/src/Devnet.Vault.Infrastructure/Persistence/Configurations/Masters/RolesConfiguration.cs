@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Devnet.Vault.Infrastructure.Persistence.Configurations.Masters;
 
-public class RolesConfiguration : IEntityTypeConfiguration<Roles>
+internal sealed class RolesConfiguration : IEntityTypeConfiguration<Roles>
 {
     public void Configure(EntityTypeBuilder<Roles> builder)
     {

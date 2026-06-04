@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Devnet.Vault.Infrastructure.Notifications.Email.Workers;
 
-public class EmailWorker(IEmailQueue _queue, IServiceScopeFactory _scopeFactory,
+internal sealed class EmailWorker(IEmailQueue _queue, IServiceScopeFactory _scopeFactory,
     ILogger<EmailWorker> _logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

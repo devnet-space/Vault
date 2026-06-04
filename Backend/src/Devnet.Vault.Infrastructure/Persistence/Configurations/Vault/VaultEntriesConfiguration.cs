@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Devnet.Vault.Infrastructure.Persistence.Configurations.Vault;
 
-public class VaultEntriesConfiguration : IEntityTypeConfiguration<VaultEntries>
+internal sealed class VaultEntriesConfiguration : IEntityTypeConfiguration<VaultEntries>
 {
     public void Configure(EntityTypeBuilder<VaultEntries> builder)
     {

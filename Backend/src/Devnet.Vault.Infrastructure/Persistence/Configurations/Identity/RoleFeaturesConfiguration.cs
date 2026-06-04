@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Devnet.Vault.Infrastructure.Persistence.Configurations.Identity;
 
-public class RoleFeaturesConfiguration : IEntityTypeConfiguration<RoleFeatures>
+internal sealed class RoleFeaturesConfiguration : IEntityTypeConfiguration<RoleFeatures>
 {
     public void Configure(EntityTypeBuilder<RoleFeatures> builder)
     {
