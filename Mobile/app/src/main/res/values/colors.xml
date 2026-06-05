@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Brand -->
+    <color name="primary">#1565C0</color>
+    <color name="primary_dark">#0D47A1</color>
+    <color name="primary_light">#42A5F5</color>
+
+    <!-- Backgrounds -->
+    <color name="screen_bg">#0B1220</color>
+    <color name="surface_bg">#162033</color>
+
+    <!-- Buttons -->
+    <color name="btn_bg">#1565C0</color>
+    <color name="btn_border">#42A5F5</color>
+    <color name="btn_text">#FFFFFF</color>
+
+    <!-- Text -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0BEC5</color>
+
+    <!-- Security/Vault Accent -->
+    <color name="vault_accent">#29B6F6</color>
+
+    <!-- Status -->
+    <color name="success">#4CAF50</color>
+    <color name="error">#F44336</color>
+
+    <!-- Generic -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+</resources>
