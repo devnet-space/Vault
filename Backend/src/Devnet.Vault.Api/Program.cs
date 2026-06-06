@@ -5,6 +5,9 @@ using Devnet.Vault.Infrastructure;
 
 namespace Devnet.Vault.Api;
 
+/// <summary>
+/// Start of the application 
+/// </summary>
 public sealed class Program
 {
     public static void Main(string[] args)

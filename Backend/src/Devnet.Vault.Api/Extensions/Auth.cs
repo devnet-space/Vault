@@ -7,6 +7,9 @@ using System.Text;
 
 namespace Devnet.Vault.Api.Extensions;
 
+/// <summary>
+/// Add jwt based auhenticationn in pipeline accepting token as bearer token as well as cookie with name AppConstants.APP_ACCESS_TOKEN_NAME
+/// </summary>
 public static class Auth
 {
     public static IServiceCollection AddAuthPolicy(this IServiceCollection _services, IConfiguration _config)

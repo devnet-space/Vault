@@ -7,5 +7,5 @@ public static class AppConstants
     public const string CORRELATION_ID_HEADER = "X-Correlation-ID";
     public const string JSON_CONTENT_TYPE = "application/json";
     public const string CORRELATION_ID_NAME = "CorrelationId";
-
+    public const string IP_ADDRESS_HEADER = "X-Forwarded-For";
 }

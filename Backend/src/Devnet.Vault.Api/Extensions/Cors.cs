@@ -2,6 +2,9 @@
 
 namespace Devnet.Vault.Api.Extensions;
 
+/// <summary>
+/// Added cqrs support implementation for allowing specific request controlled through config
+/// </summary>
 public static class Cors
 {
     public static IServiceCollection AddCORSPolicy(this IServiceCollection _services, IConfiguration _config)

@@ -1,4 +1,5 @@
-﻿using Amazon.S3;
+﻿#region imports
+using Amazon.S3;
 using Devnet.Vault.Application.Configurations;
 using Devnet.Vault.Application.Features.Account.Interfaces.Repositories;
 using Devnet.Vault.Application.Features.Auth.Interfaces.Repositories;
@@ -33,16 +34,22 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
+#endregion
 
 namespace Devnet.Vault.Infrastructure;
 
+/// <summary>
+/// Added dependecy related to infrastructure layer
+/// </summary>
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection _services, IConfiguration _config)
     {
         var mySqlConnectionString = _config[ConfigKeys.MYSQL_CONNECTION_STRINGS_KEY];
-        var redisConnectionString = _config[ConfigKeys.REDIS_CONNECTION_STRINGS_KEY];
+        var redisConnectionString = _config[ConfigKeys.REDIS_CONNECTION_STRINGS_KEY]
+            ?? throw new KeyNotFoundException(ExceptionMessages.REDIS_CONNECTION_KEY_NOT_FOUND);
 
+        // register mysql connecton provider with entity and dapper support
         _services.AddScoped<DbConnectionFactory>();
 
         _services.AddDbContext<AppDbContext>(options =>
@@ -52,17 +59,104 @@ public static class DependencyInjection
                 ServerVersion.AutoDetect(mySqlConnectionString)
             );
         });
-        _services.AddSingleton<IEmailQueue, InMemoryEmailQueue>();
-        _services.AddScoped<IEmailSender, SmtpEmailSender>();
 
-        _services.AddHostedService<EmailWorker>();
-        _services.AddHostedService<FileUploadWorker>();
-        _services.AddSingleton(typeof(IAppLogger<>), typeof(SerilogAppLogger<>));
+        _services.RegisterRedis(redisConnectionString);
+        _services.RegisterStorageSupport();
 
-        _services.AddScoped<IEncryptionService, EncryptionService>();
-        _services.AddScoped<IJwtService, JwtService>();
+        _services.RegisterRepositories();
+        _services.RegisterServices();
+        _services.RegisterBackgroundServiceAndQueues();
 
-        _services.AddSingleton<AmazonS3Client>(provider =>
+
+        return _services;
+    }
+
+    /// <summary>
+    /// Register all background worker , queues and services relaed to queues
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    private static IServiceCollection RegisterBackgroundServiceAndQueues(this IServiceCollection services)
+    {
+        services.AddSingleton<IEmailQueue, InMemoryEmailQueue>();
+        services.AddScoped<IEmailSender, SmtpEmailSender>();
+
+        services.AddHostedService<EmailWorker>();
+        services.AddHostedService<FileUploadWorker>();
+        services.AddSingleton(typeof(IAppLogger<>), typeof(SerilogAppLogger<>));
+
+        services.AddSingleton<IFileUploadQueue, InMemoryFileUploadQueue>();
+        services.AddScoped<IR2FileUploadService, R2FileUploadService>();
+
+        return services;
+    }
+
+    /// <summary>
+    /// Register infrastructure services 
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    private static IServiceCollection RegisterServices(this IServiceCollection services)
+    {
+        services.AddScoped<ICacheService, RedisCacheService>();
+        services.AddScoped<IOtpGenerator, OtpGenerator>();
+        services.AddScoped<IOtpValidationService, OtpValidationService>();
+        services.AddScoped<IEncryptionService, EncryptionService>();
+        services.AddScoped<IJwtService, JwtService>();
+
+        return services;
+    }
+
+    /// <summary>
+    /// Register repositories implemenatation whose constract defined in application layer
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    private static IServiceCollection RegisterRepositories(this IServiceCollection services)
+    {
+        // Register Auth and Account Repositories
+        services.AddScoped<IAuthRepository, AuthRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IGroupRepository, GroupRepository>();
+        services.AddScoped<IVaultItemsRepository, VaultItemsRepository>();
+
+        return services;
+    }
+
+    /// <summary>
+    /// Added redis connection support suing connection multiplexer
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="redisConnectionString"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    private static IServiceCollection RegisterRedis(this IServiceCollection services, string redisConnectionString)
+    {
+
+        services.AddSingleton<IConnectionMultiplexer>(sp =>
+        {
+            if (string.IsNullOrWhiteSpace(redisConnectionString))
+                throw new InvalidOperationException(ExceptionMessages.REDIS_CONNECTION_KEY_NOT_FOUND);
+
+            var options = ConfigurationOptions.Parse(redisConnectionString);
+
+            options.AbortOnConnectFail = false;
+            options.ConnectRetry = 3;
+            options.ReconnectRetryPolicy = new ExponentialRetry(5000);
+
+            return ConnectionMultiplexer.Connect(options);
+        });
+        return services;
+    }
+
+    /// <summary>
+    /// Register cloudfarer2 support for storing files and folders
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    private static IServiceCollection RegisterStorageSupport(this IServiceCollection services)
+    {
+        services.AddSingleton<AmazonS3Client>(provider =>
         {
             var settings = provider
                 .GetRequiredService<IOptions<CloudFareR2Settings>>()
@@ -80,32 +174,7 @@ public static class DependencyInjection
                 settings.SecretAccessKey,
                 config);
         });
-        _services.AddSingleton<IFileUploadQueue, InMemoryFileUploadQueue>();
-        _services.AddScoped<IR2FileUploadService, R2FileUploadService>();
 
-        _services.AddSingleton<IConnectionMultiplexer>(sp =>
-        {
-            if (string.IsNullOrWhiteSpace(redisConnectionString))
-                throw new InvalidOperationException(ExceptionMessages.REDIS_CONNECTION_KEY_NOT_FOUND);
-
-            var options = ConfigurationOptions.Parse(redisConnectionString);
-
-            options.AbortOnConnectFail = false;
-            options.ConnectRetry = 3;
-            options.ReconnectRetryPolicy = new ExponentialRetry(5000);
-
-            return ConnectionMultiplexer.Connect(options);
-        });
-        _services.AddScoped<ICacheService, RedisCacheService>();
-        _services.AddScoped<IOtpGenerator, OtpGenerator>();
-        _services.AddScoped<IOtpValidationService, OtpValidationService>();
-
-        // Register Auth and Account Repositories
-        _services.AddScoped<IAuthRepository, AuthRepository>();
-        _services.AddScoped<IUserRepository, UserRepository>();
-        _services.AddScoped<IGroupRepository, GroupRepository>();
-        _services.AddScoped<IVaultItemsRepository, VaultItemsRepository>();
-
-        return _services;
+        return services;
     }
 }
