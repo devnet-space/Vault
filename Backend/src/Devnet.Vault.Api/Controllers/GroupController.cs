@@ -16,6 +16,13 @@ namespace Devnet.Vault.Api.Controllers;
 [Authorize]
 public class GroupController(IMediator _mediator) : ControllerBase
 {
+
+    /// <summary>
+    /// Create new group under given parent group if provided else become parent group itself
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPost(ApiEndpoints.GroupApiEndpoints.CREATE)]
     [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -31,6 +38,12 @@ public class GroupController(IMediator _mediator) : ControllerBase
         return Ok(response);
     }
 
+    /// <summary>
+    /// update the group name if group name not already in the same parent group
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPatch(ApiEndpoints.GroupApiEndpoints.UPDATE_NAME)]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -47,6 +60,12 @@ public class GroupController(IMediator _mediator) : ControllerBase
         return BadRequest(new { message = GroupValidationMessages.GROUP_UPDATE_FAILED });
     }
 
+    /// <summary>
+    /// update group status to or remove it as favourite group
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPatch(ApiEndpoints.GroupApiEndpoints.UPDATE_FAVOURITE)]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -62,6 +81,12 @@ public class GroupController(IMediator _mediator) : ControllerBase
         return BadRequest(new { message = GroupValidationMessages.GROUP_UPDATE_FAILED });
     }
 
+    /// <summary>
+    /// update the group parent group if not under circular loop
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPatch(ApiEndpoints.GroupApiEndpoints.UPDATE_PARENT)]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -78,6 +103,12 @@ public class GroupController(IMediator _mediator) : ControllerBase
     }
 
 
+    /// <summary>
+    /// Update group related details present in metadata
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPatch(ApiEndpoints.GroupApiEndpoints.UPDATE_METADATA)]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -93,6 +124,12 @@ public class GroupController(IMediator _mediator) : ControllerBase
         return BadRequest(new { message = GroupValidationMessages.GROUP_UPDATE_FAILED });
     }
 
+    /// <summary>
+    /// soft delete the group
+    /// </summary>
+    /// <param name="groupId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpDelete(ApiEndpoints.GroupApiEndpoints.DELETE_GROUP)]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -108,6 +145,14 @@ public class GroupController(IMediator _mediator) : ControllerBase
         return BadRequest(new { message = GroupValidationMessages.GROUP_DELETE_FAILED });
     }
 
+
+    /// <summary>
+    /// provides all child group inside requested parent group id
+    /// </summary>
+    /// <param name="parentGroupId"></param>
+    /// <param name="groupType"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet(ApiEndpoints.GroupApiEndpoints.CHILDREN)]
     [ProducesResponseType(typeof(List<GroupDetailsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -122,6 +167,12 @@ public class GroupController(IMediator _mediator) : ControllerBase
         return Ok(items);
     }
 
+    /// <summary>
+    /// Provides parent detail of given child group
+    /// </summary>
+    /// <param name="groupId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet(ApiEndpoints.GroupApiEndpoints.PARENT)]
     [ProducesResponseType(typeof(GroupDetailsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -137,6 +188,12 @@ public class GroupController(IMediator _mediator) : ControllerBase
         return Ok(item);
     }
 
+    /// <summary>
+    /// Provides details of group by group id
+    /// </summary>
+    /// <param name="groupId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet(ApiEndpoints.GroupApiEndpoints.GET_BY_ID)]
     [ProducesResponseType(typeof(GroupDetailsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
