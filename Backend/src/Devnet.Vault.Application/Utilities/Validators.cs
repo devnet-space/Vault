@@ -4,6 +4,9 @@ using System.Text.Json;
 
 namespace Devnet.Vault.Application.Utilities;
 
+/// <summary>
+/// Common validators
+/// </summary>
 public static class Validators
 {
     public static bool IsValidEmail(string email)

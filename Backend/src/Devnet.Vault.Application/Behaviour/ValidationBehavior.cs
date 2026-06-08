@@ -3,6 +3,12 @@ using MediatR;
 
 namespace Devnet.Vault.Application.Behaviour;
 
+/// <summary>
+/// Add behaviour to validate all the rules against the request and throw validation exception if any rule is not false
+/// </summary>
+/// <typeparam name="TRequest"></typeparam>
+/// <typeparam name="TResponse"></typeparam>
+/// <param name="_validators"></param>
 public sealed class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> _validators)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
