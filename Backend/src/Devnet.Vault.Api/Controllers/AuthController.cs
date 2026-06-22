@@ -121,13 +121,17 @@ public class AuthController(IMediator _mediator) : ControllerBase
 
     #region Private Helpers
 
+    /// <summary>
+    /// set cookie options and append with request
+    /// </summary>
+    /// <param name="response"></param>
     private void SetAuthCookies(AuthResponse response)
     {
         var accessTokenOptions = new CookieOptions
         {
             HttpOnly = true,
             Secure = true,
-            SameSite = SameSiteMode.Strict,
+            SameSite = SameSiteMode.Lax,
             Expires = DateTimeOffset.UtcNow.AddMinutes(response.ExpiryMinutes)
         };
 
@@ -151,6 +155,9 @@ public class AuthController(IMediator _mediator) : ControllerBase
             refreshTokenOptions);
     }
 
+    /// <summary>
+    /// Delete cookies related to authentication post signout for removing ambiguity
+    /// </summary>
     private void ClearAuthCookies()
     {
         Response.Cookies.Delete(AppConstants.APP_ACCESS_TOKEN_NAME);
