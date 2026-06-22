@@ -4,6 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace Devnet.Vault.Api.Extensions;
 
+/// <summary>
+/// Add all dependency of presentation layer
+/// </summary>
 public static class DependencyInjection
 {
     public static WebApplicationBuilder AddPresentation(this WebApplicationBuilder builder, IConfiguration configuration)
@@ -11,9 +14,11 @@ public static class DependencyInjection
         builder.Services.AddControllers()
            .AddJsonOptions(options =>
            {
+               // convert all enums to json and vice versa for user friendly request and response
                options.JsonSerializerOptions.Converters.Add(
                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, allowIntegerValues: false));
            });
+
 
         builder.Services.BindAppsettings(configuration);
 
@@ -29,6 +34,7 @@ public static class DependencyInjection
         builder.ConfigureLogger();
 
 
+        // Added support of open api for getting api documentaion and importing it for postman collection
         builder.Services.AddOpenApi();
 
         return builder;

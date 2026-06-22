@@ -3,6 +3,9 @@ using Devnet.Vault.Domain.Constants.AppKeys;
 
 namespace Devnet.Vault.Api.Extensions;
 
+/// <summary>
+/// Extension to add all middleware in request pipeline
+/// </summary>
 public static class RequestPipeline
 {
     public static void AddMiddlewares(this WebApplication _app)
